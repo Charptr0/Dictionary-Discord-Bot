@@ -6,7 +6,7 @@ from urllib.request import urlopen, Request
 The Dictionary class is the master class, its function is to grab the HTML data from dictionary.com
 This class also sort the definitions, part of speech, synonyms and antonyms
 
-getDefinitions() sort the all the definitions into a list
+getDefinitions() sort all definitions into a list
 ...
 '''
 class __Dictionary():
@@ -18,7 +18,8 @@ class __Dictionary():
         return raw_definitions
 
     def getPartOfSpeech(self):
-        pass
+        raw_partOfSpeech = self.wordSoup.findAll("span", {"class" : "luna-pos"})[0]
+        return raw_partOfSpeech
 
 '''
 The Word class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
@@ -33,19 +34,20 @@ class Word(__Dictionary):
         self.main_definitions = None
 
     def definitions(self):
-        self.__list_of_all_definitions = self.getDefinitions() #Grab the list of definitions from the dictionary class
-        if len(self.__list_of_all_definitions) == 0: return "No definitions found" #if the length of the list is 0, then no definition is found by the program
+        list_of_all_definitions = self.getDefinitions() #Grab the list of definitions from the dictionary class
+        if len(list_of_all_definitions) == 0: return "No definitions found" #if the length of the list is 0, then no definition is found by the program
 
         self.main_definitions = "" 
 
-        for index, definition in enumerate(self.__list_of_all_definitions):
+        for index, definition in enumerate(list_of_all_definitions):
             if index == 3: break
             self.main_definitions += "{}. {}\n".format((index+1), definition.text)
         
         return self.main_definitions
 
     def partOfSpeech(self):
-        pass
+        return str(self.getPartOfSpeech().text)
+
 
 class UrbanWord(__Dictionary):
     def __init__(self, wordSoup):
@@ -61,7 +63,7 @@ def getHTML(word : str):
         with urlopen(Request(url, headers={'User-Agent': 'Mozilla'})) as webpage:
                 pageHtml = webpage.read()
     except:
-        return "404"
+        return "404 Webpage cannot be found"
 
     wordSoup = soup(pageHtml, "html.parser")
 
