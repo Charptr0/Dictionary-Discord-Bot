@@ -2,32 +2,47 @@ import bs4
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen, Request
 
+'''
+The Dictionary class is the master class, its function is to grab the HTML data from dictionary.com
+This class also sort the definitions, part of speech, synonyms and antonyms
+
+getDefinitions() sort the all the definitions into a list
+...
+'''
 class __Dictionary():
     def __init__(self, wordSoup):
         self.wordSoup = wordSoup
-        self.name = None
-        self.definitions = None
-        self.partOfSpeech = None
 
     def getDefinitions(self):
-        if self.wordSoup == "404": return "Page cannot be found"
-
-        definitions = self.wordSoup.findAll("span", {"class": "one-click-content css-ibc84h e1q3nk1v1"})
-
-        if len(definitions) == 0: return "No definitions found"
-
-        return definitions
+        raw_definitions = self.wordSoup.findAll("span", {"class": "one-click-content css-ibc84h e1q3nk1v1"})
+        return raw_definitions
 
     def getPartOfSpeech(self):
         pass
+
+'''
+The Word class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
+embed messages
+
+'''
 
 class Word(__Dictionary):
     def __init__(self, wordSoup, name):
         super().__init__(wordSoup)
         self.name = name
+        self.main_definitions = None
 
     def definitions(self):
-        pass
+        self.__list_of_all_definitions = self.getDefinitions() #Grab the list of definitions from the dictionary class
+        if len(self.__list_of_all_definitions) == 0: return "No definitions found" #if the length of the list is 0, then no definition is found by the program
+
+        self.main_definitions = "" 
+
+        for index, definition in enumerate(self.__list_of_all_definitions):
+            if index == 3: break
+            self.main_definitions += "{}. {}\n".format((index+1), definition.text)
+        
+        return self.main_definitions
 
     def partOfSpeech(self):
         pass
@@ -50,6 +65,8 @@ def getHTML(word : str):
 
     wordSoup = soup(pageHtml, "html.parser")
 
-    word = Word(wordSoup=wordSoup) 
+    newWord = Word(wordSoup=wordSoup, name=word)
+    
+    return newWord
 
 
