@@ -36,10 +36,13 @@ async def on_ready():
 
 @bot.command("define")
 async def define(ctx, unknownWord):
-    word = dictionary.getHTML(unknownWord)
+    word = dictionary.getDictionaryWordHTML(unknownWord)
     if word == "404 Webpage cannot be found" or word.definitions() == "No definitions found":
         await ctx.send(embed=createWordErrorEmbed(word))
+
 
     else: await ctx.send(embed=createWordEmbed(word))
 
 bot.run(token)
+
+
