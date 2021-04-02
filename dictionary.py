@@ -32,6 +32,15 @@ class __Dictionary():
     def _getPartOfSpeech(self) -> list:
         list_of_all_partOfSpeech = self._wordSoup.findAll("span", {"class" : "luna-pos"})
         return list_of_all_partOfSpeech
+    
+    def _getSynonyms(self) -> list:
+        list_of_all_synonyms = self._wordSoup.findAll("a", {"class" : "luna-xref"})
+        return list_of_all_synonyms
+
+    def _getAntonyms(self) -> list:
+        list_of_all_antonyms = self._wordSoup.findAll("a", {"class" : "css-15bafsg eh475bn0"})
+        return list_of_all_antonyms
+
 
 '''
 The Word class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
@@ -62,7 +71,27 @@ class Word(__Dictionary):
         self._partOfSpeech = (self._getPartOfSpeech())[0].text
         return str(self._partOfSpeech)
 
+    def synonyms(self):
+        list_of_all_synonyms = self._getSynonyms()
 
+        self._synonyms = ""
+
+        for index, synonym in enumerate(list_of_all_synonyms):
+            if index == self._LIMIT: break
+            self._synonyms += "{}. {}\n".format((index+1), synonym.text)
+
+        return self._synonyms
+
+    def antonyms(self):
+        list_of_all_antonyms = self._getAntonyms()
+
+        self._antonyms = ""
+
+        for index, antonym in enumerate(list_of_all_antonyms):
+            if index == self._LIMIT: break
+            self._antonyms += "{}. {}\n".format((index+1), antonym.text)
+
+        
 class UrbanWord(__Dictionary):
     def __init__(self, wordSoup):
         super().__init__(wordSoup)
@@ -96,3 +125,15 @@ def getDictionaryWordHTML(word : str) -> Word:
     newWord = Word(wordSoup=wordSoup, name=word) #Create a new instance of the word class
     
     return newWord
+
+def _getThesaurusHTML(word : Word):
+    url = "https://www.thesaurus.com/browse/" + word #the word's page on the dictionary.com
+
+    try: #access that URL
+        with urlopen(Request(url, headers={'User-Agent': 'Mozilla'})) as webpage:
+                pageHtml = webpage.read()
+    except: #if some error occurs, we assume the page DNE, and terminate the function
+        return "404 Webpage cannot be found"
+
+    word._wordSoup = soup(pageHtml, "html.parser")
+    

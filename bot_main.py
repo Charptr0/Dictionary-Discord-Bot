@@ -11,9 +11,11 @@ bot.remove_command("help")
 
 def createWordEmbed(word): #If the word exists, create an embed message that contains the name, pos, definition, synonyms and antonyms of the word
     embed_message = discord.Embed(title="Dictionary Bot", description="Here is what I found:", colour=discord.Colour.blue())
-    embed_message.add_field(name="Word", value=word.name, inline=False)
+    embed_message.add_field(name="Word", value=word.name(), inline=False)
     embed_message.add_field(name="Part of Speech", value=word.partOfSpeech(), inline=False)
     embed_message.add_field(name="Definitions", value=word.definitions(), inline=False)
+    embed_message.add_field(name="Synonyms", value=word.synonyms(), inline=False)
+    embed_message.add_field(name="Antonyms", value=word.antonyms(), inline=False)
     return embed_message
 
 def createWordErrorEmbed(error_message): #If an error occurs, create an embed message to inform the user
@@ -39,7 +41,6 @@ async def define(ctx, unknownWord):
     word = dictionary.getDictionaryWordHTML(unknownWord)
     if word == "404 Webpage cannot be found" or word.definitions() == "No definitions found":
         await ctx.send(embed=createWordErrorEmbed(word))
-
 
     else: await ctx.send(embed=createWordEmbed(word))
 
