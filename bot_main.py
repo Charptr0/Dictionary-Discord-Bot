@@ -15,7 +15,10 @@ def createWordEmbed(word): #If the word exists, create an embed message that con
     embed_message.add_field(name="Part of Speech", value=word.partOfSpeech(), inline=False)
     embed_message.add_field(name="Definitions", value=word.definitions(), inline=False)
     embed_message.add_field(name="Synonyms", value=word.synonyms(), inline=False)
-    embed_message.add_field(name="Antonyms", value=word.antonyms(), inline=False)
+
+    if word.antonyms() != None:
+        embed_message.add_field(name="Antonyms", value=word.antonyms(), inline=False)
+
     return embed_message
 
 def createWordErrorEmbed(error_message): #If an error occurs, create an embed message to inform the user

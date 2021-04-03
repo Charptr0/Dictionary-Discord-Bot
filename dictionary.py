@@ -38,7 +38,9 @@ class __Dictionary():
         return list_of_all_synonyms
 
     def _getAntonyms(self) -> list:
+        _getThesaurusHTML(word=self)
         list_of_all_antonyms = self._wordSoup.findAll("a", {"class" : "css-15bafsg eh475bn0"})
+        
         return list_of_all_antonyms
 
 
@@ -85,11 +87,15 @@ class Word(__Dictionary):
     def antonyms(self):
         list_of_all_antonyms = self._getAntonyms()
 
+        if len(list_of_all_antonyms) == 0: return None
+
         self._antonyms = ""
 
         for index, antonym in enumerate(list_of_all_antonyms):
             if index == self._LIMIT: break
             self._antonyms += "{}. {}\n".format((index+1), antonym.text)
+        
+        return self._antonyms
 
         
 class UrbanWord(__Dictionary):
@@ -127,7 +133,7 @@ def getDictionaryWordHTML(word : str) -> Word:
     return newWord
 
 def _getThesaurusHTML(word : Word):
-    url = "https://www.thesaurus.com/browse/" + word #the word's page on the dictionary.com
+    url = "https://www.thesaurus.com/browse/" + word.name() #the word's page on the dictionary.com
 
     try: #access that URL
         with urlopen(Request(url, headers={'User-Agent': 'Mozilla'})) as webpage:
