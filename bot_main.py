@@ -26,10 +26,7 @@ def createWordErrorEmbed(error_message): #If an error occurs, create an embed me
     embed_message.add_field(name="Error Message:", value=error_message, inline=False)
 
     if "404" in error_message:
-        embed_message.add_field(name="Possible Soultion:", value='''Please check your spelling of the word and try again.\nTry using "db!udefine" instead, the word you are looking for does not exist on dictionary.com''', inline=False)
-
-    elif "No definitions found" in error_message:
-        embed_message.add_field(name="Possible Soultion:", value='''No definitions exist for this word according to Dictionary.com''', inline=False)
+        embed_message.add_field(name="Possible Soultion:", value='''Please check your spelling of the word or phrase and try again.''', inline=False)
 
     embed_message.set_footer(text="Please contact the server mods if you are having trouble")
 
@@ -46,6 +43,16 @@ async def define(ctx, unknownWord):
         await ctx.send(embed=createWordErrorEmbed(word))
 
     else: await ctx.send(embed=createWordEmbed(word))
+
+@bot.command("udefine")
+async def udefine(ctx, *unknownPhrase):
+    urban_phrase = dictionary.getUrbanHTML(unknownPhrase)
+
+    if urban_phrase == "404 Webpage cannot be found":
+        await ctx.send(embed=createWordErrorEmbed(urban_phrase))
+    
+    else: await ctx.send("connected")
+
 
 bot.run(token)
 

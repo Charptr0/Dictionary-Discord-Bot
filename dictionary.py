@@ -43,6 +43,9 @@ class __Dictionary():
         
         return list_of_all_antonyms
 
+    def _getUrbanDefinitions(self) -> list:
+        pass
+
 
 '''
 The Word class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
@@ -99,11 +102,25 @@ class Word(__Dictionary):
 
         
 class UrbanWord(__Dictionary):
-    def __init__(self, wordSoup):
+    def __init__(self, wordSoup, phrase):
         super().__init__(wordSoup)
-        self.author = None
-        self.contributionDate = None
+        self._phrase_list = phrase
+        self._author = None
+        self._contributionDate = None
+    
+    def phrase(self):
+        complete_phrase = ""
 
+        for index, word in enumerate(self._phrase_list):
+            if index == 0:
+                complete_phrase = word
+
+            else : complete_phrase += " " + word
+        
+        return complete_phrase
+
+    def definition(self):
+        pass
 
 
 
@@ -142,4 +159,23 @@ def _getThesaurusHTML(word : Word):
         return "404 Webpage cannot be found"
 
     word._wordSoup = soup(pageHtml, "html.parser")
+
+def getUrbanHTML(phrase : list):
+    url = "https://www.urbandictionary.com/define.php?term="
+
+    for index, word in enumerate(phrase):
+        if index == 0:
+            url += word
+        else: url += "%20" + word
     
+    try: #access that URL
+        with urlopen(Request(url, headers={'User-Agent': 'Mozilla'})) as webpage:
+                pageHtml = webpage.read()
+    except: #if some error occurs, we assume the page DNE, and terminate the function
+        return "404 Webpage cannot be found"
+
+    wordSoup = soup(pageHtml, "html.parser")
+
+    newUrbanPhrase = UrbanWord(wordSoup=wordSoup, phrase=phrase) #Create a new instance of the word class
+    
+    return newUrbanPhrase
