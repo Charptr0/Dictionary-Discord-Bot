@@ -6,8 +6,8 @@ Finding the meaning behind words and phrases directly through Discord.
 **For official English words**: <img src="https://i.imgur.com/1bD29dw.png" width="250px" align="right"></img>
 
 - If the connection is successful, the bot will display:
-  - The name of the Word
-  - Top three Definitions
+  - The Name of the Word
+  - Top Three Definitions
   - Part of Speech
   - Up to three Synonyms and Antonyms* (*if the word has antonyms)
 - All information will be grabbed from https://dictionary.com
@@ -16,9 +16,9 @@ Finding the meaning behind words and phrases directly through Discord.
 
 **For phrases and modern slang**: <img src="https://i.imgur.com/nrwLGD9.png" width="250px" align="right"></img>
 - If the connection is successful, the bot will display:
-  - The top Definition
-  - The contributor
-  - The contribution date
+  - The Top Definition
+  - The Contributor
+  - The Contribution Date
 - All information will be grabbed from https://urbandictionary.com
 
 <hr>
@@ -59,11 +59,11 @@ Look up a word or a phrase from urbandictionary.com
 </div>
 
 **Starting the bot using Docker**
-- Clone this repository
-- Copy your bot token and paste it into the token variable (The token has to be a string)
-- Run the Dockerfile
+1. Clone this repository
+2. Copy your bot token and paste it into the token variable (The token has to be a string)
+3. Run the Dockerfile
 
 ## Modules/Dependencies
 - Discord API
-- Beautiful Soup
+- BeautifulSoup
 - Urllib.request
