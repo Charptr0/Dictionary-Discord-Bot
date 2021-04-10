@@ -5,7 +5,7 @@ Finding the meaning behind words and phrases directly through Discord.
 ## Features
 **For official English words**: <img src="https://i.imgur.com/1bD29dw.png" width="250px" align="right"></img>
 
-- If the connection is successful, the bot will display:
+- If the connection was successful, the bot will display:
   - The Name of the Word
   - Top Three Definitions
   - Part of Speech
@@ -15,7 +15,7 @@ Finding the meaning behind words and phrases directly through Discord.
 <hr>
 
 **For phrases and modern slang**: <img src="https://i.imgur.com/nrwLGD9.png" width="250px" align="right"></img>
-- If the connection is successful, the bot will display:
+- If the connection was successful, the bot will display:
   - The Top Definition
   - The Contributor
   - The Contribution Date
@@ -41,22 +41,16 @@ Look up a word from dictionary.com
 Look up a word or a phrase from urbandictionary.com
 
 ## Installation
-<div><strong>The Basics</strong>
-<ol>
-  <li>Create a <a href="https://discord.com/">discord account</a></li>
-  <li>Create an empty bot from the <a href="https://discord.com/developers/applications">Discord Developer Portal</a></li>
-  <li>Invite the empty bot to your server</li>
-</ol>
-</div>
+**The Basics**
+1. Create a <a href="https://discord.com/">discord account</a>
+2. Create an empty bot from the <a href="https://discord.com/developers/applications">Discord Developer Portal</a>
+3. Invite the empty bot to your server
 
-<div><strong>Starting the bot from scratch</strong>
-<ol>
-  <li>Clone this repository</li>
-  <li>Install all the dependencies</li>
-  <li>Copy your bot token and paste it into the token variable (The token has to be a string)</li>
-  <li>Start the bot</li>
-</ol>
-</div>
+**Starting the bot from scratch**
+1. Clone this repository
+2. Install all the dependencies
+3. Copy your bot token and paste it into the token variable (The token has to be a string)
+4. Start the bot
 
 **Starting the bot using Docker**
 1. Clone this repository
