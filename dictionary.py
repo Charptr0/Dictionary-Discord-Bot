@@ -13,7 +13,21 @@ getPartOfSpeech() sort all part of speech into a list*
     - return a "list" of all part of speech
     - the first element is the main part of speech
     - discard the list after the first element
-...
+
+getSynonyms() sort all synonyms into a list
+    - return a list of all synonyms
+
+getAntonyms() sort all antonyms into a list
+    - return a list of all antonyms
+
+getUrbanDefinitions() sorts all urban definitions into a list
+    - return a list of all urban definitions
+
+getContributor() sort all contributors into a list
+    - return a list of all contributors
+
+delete()
+    - delete the instance
 '''
 class __Dictionary():
     def __init__(self, wordSoup):
@@ -21,7 +35,7 @@ class __Dictionary():
         self._name = None
         self._main_definitions = None
         self._partOfSpeech = None
-        self._LIMIT = 3
+        self._LIMIT = 3 #this set how many definitions the bot is going to show
         self._synonyms = None
         self._antonyms = None
 
@@ -44,13 +58,45 @@ class __Dictionary():
         return list_of_all_antonyms
 
     def _getUrbanDefinitions(self) -> list:
-        pass
+        list_of_all_urban_definitions = self._wordSoup.findAll("div", {"class" : "meaning"})
+        
+        return list_of_all_urban_definitions
 
+    def _getContributor(self) -> list:
+        list_of_all_contributor = self._wordSoup.findAll("div", {"class" : "contributor"})
+        
+        return list_of_all_contributor
+
+    def delete(self):
+        del self
 
 '''
 The Word class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
 embed messages
 
+name()
+    - return the name in strings
+
+definitions()
+    - grab the list of all sorted defintions
+    - sort them into strings according to the _LIMIT
+    - return the definitions as a string
+
+partOfSpeech()
+    - grab the list of all sorted part of speech
+    - grab the first element of that list
+    - return the part of speech as a list
+
+synonyms()
+    - grab the list of all sorted synonyms
+    - sort them into strings according to the _LIMIT
+    - return the synonyms as a string
+
+antonyms()
+    - grab the list of all sorted antonyms
+    - sort them into strings according to the _LIMIT
+    - if there are no antonyms, return NONE
+    - return the antonyms as a string
 '''
 
 class Word(__Dictionary):
@@ -58,9 +104,9 @@ class Word(__Dictionary):
         super().__init__(wordSoup)
         self._name = name
 
-    def name(self): return self._name
+    def name(self) -> str: return self._name
 
-    def definitions(self):
+    def definitions(self) -> str:
         list_of_all_definitions = self._getDefinitions() #Grab the list of definitions from the dictionary class
         if len(list_of_all_definitions) == 0: return "No definitions found" #if the length of the list is 0, then no definition is found by the program
 
@@ -72,11 +118,11 @@ class Word(__Dictionary):
         
         return self._main_definitions
 
-    def partOfSpeech(self):
+    def partOfSpeech(self) -> str:
         self._partOfSpeech = (self._getPartOfSpeech())[0].text
         return str(self._partOfSpeech)
 
-    def synonyms(self):
+    def synonyms(self) -> str:
         list_of_all_synonyms = self._getSynonyms()
 
         self._synonyms = ""
@@ -87,10 +133,10 @@ class Word(__Dictionary):
 
         return self._synonyms
 
-    def antonyms(self):
+    def antonyms(self) -> str:
         list_of_all_antonyms = self._getAntonyms()
 
-        if len(list_of_all_antonyms) == 0: return None
+        if len(list_of_all_antonyms) == 0: return None #if no antonyms exist for that word
 
         self._antonyms = ""
 
@@ -100,15 +146,29 @@ class Word(__Dictionary):
         
         return self._antonyms
 
-        
+'''
+The UrbanWord class is a subclass of the Dictionary class, its function is to provide a organized way to print the 
+embed messages
+
+phrase()
+    - return the phrase as a string
+
+definitions()
+    - grab the top definition
+    - return the definition as a string
+
+author()
+    - grab the author who created the top definition and the contribution date
+    - return the author's name and the contribution date as a string
+
+'''
 class UrbanWord(__Dictionary):
     def __init__(self, wordSoup, phrase):
         super().__init__(wordSoup)
         self._phrase_list = phrase
         self._author = None
-        self._contributionDate = None
     
-    def phrase(self):
+    def phrase(self) -> str:
         complete_phrase = ""
 
         for index, word in enumerate(self._phrase_list):
@@ -119,10 +179,13 @@ class UrbanWord(__Dictionary):
         
         return complete_phrase
 
-    def definition(self):
-        pass
+    def definition(self) -> str:
+        return self._getUrbanDefinitions()[0].text
 
-
+    def author(self) -> str:
+        self._author = self._getContributor()[0].text
+        
+        return self._author
 
 '''
 getDictionaryWordHTML()
@@ -149,6 +212,17 @@ def getDictionaryWordHTML(word : str) -> Word:
     
     return newWord
 
+'''
+_getThesaurusHTML()
+    - private function
+    - connect to thesaurus.com using urlopen() from the request module
+    - download the HTML from the page
+    - beautiful soup will parse the HTML data and update the _wordsoup var
+    - use this to get the antonyms ONLY
+
+    - if request cannot get the webpage or the webpage DNE, it will return with 404
+'''
+
 def _getThesaurusHTML(word : Word):
     url = "https://www.thesaurus.com/browse/" + word.name() #the word's page on the dictionary.com
 
@@ -160,10 +234,19 @@ def _getThesaurusHTML(word : Word):
 
     word._wordSoup = soup(pageHtml, "html.parser")
 
-def getUrbanHTML(phrase : list):
+
+'''
+getUrbanHTML()
+    - connect to urbandictionary.com using urlopen() from the request module
+    - download the HTML from the page
+    - beautiful soup will parse the HTML data and return a new instance of the UrbanWord() class
+
+    - if request cannot get the webpage or the webpage DNE, it will return with 404
+'''
+def getUrbanHTML(phrase : list) -> UrbanWord:
     url = "https://www.urbandictionary.com/define.php?term="
 
-    for index, word in enumerate(phrase):
+    for index, word in enumerate(phrase): #urbandictionary url formatting
         if index == 0:
             url += word
         else: url += "%20" + word
