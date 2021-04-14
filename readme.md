@@ -1,6 +1,6 @@
 # Dictionary Discord Bot <img src="https://i.imgur.com/NBbOMgg.png" width="150px" align="right"></img>
 
-Finding the meaning behind words and phrases directly through Discord.
+Find the meaning behind words and phrases directly through Discord.
 
 ## Features
 **For official English words**: <img src="https://i.imgur.com/1bD29dw.png" width="250px" align="right"></img>
@@ -10,28 +10,33 @@ Finding the meaning behind words and phrases directly through Discord.
   - Top Three Definitions
   - Part of Speech
   - Up to three Synonyms and Antonyms* (*if the word has antonyms)
-- All information will be grabbed from https://dictionary.com
+- All information are from https://dictionary.com
 
 <hr>
 
-**For phrases and modern slang**: <img src="https://i.imgur.com/nrwLGD9.png" width="250px" align="right"></img>
+**For phrases and modern slangs**: <img src="https://i.imgur.com/nrwLGD9.png" width="250px" align="right"></img>
 - If the connection was successful, the bot will display:
   - The Top Definition
   - The Contributor
   - The Contribution Date
-- All information will be grabbed from https://urbandictionary.com
+- All information are from https://urbandictionary.com
 
 <hr>
 
 **If the bot cannot get a connection to dictionary or urbandictionary**:<img src="https://i.imgur.com/zfFBT5i.png" width="450px" align="right"></img>
 - The bot will display an error message:
-  - Notifying the user that there is an connection issue
+  - Notifying the user that there is a connection issue
   - Printing out the error message
   - Listing some possible solutions
 
 - Most of the errors are caused by the user searching up a word or a phrase that does not exist
 
 ## Commands
+
+<code>db!help</code>
+
+Display a list of commands
+
 <code>db!define [word]</code>
 
 Look up a word from dictionary.com
